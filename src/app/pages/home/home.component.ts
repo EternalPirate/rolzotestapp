@@ -1,13 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as MediumEditor from 'medium-editor';
 
 import { UserData, UserDataService } from '@app/core/api/data/user-data.service';
-import { AuthService, User } from '@app/core/services/auth/auth.service';
-import { from, fromEvent, Observable, of } from 'rxjs';
-import { buffer, bufferTime, debounceTime, delay, distinctUntilChanged, map, take, tap } from 'rxjs/operators';
+import { AuthService } from '@app/core/services/auth/auth.service';
 import { EditorUtils } from '@app/core/utils/editor-utils';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @AutoUnsubscribe()

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@env/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import { environment } from '@env/environment';
 
 
 export interface UserData {
@@ -15,7 +16,8 @@ export class UserDataService {
 
   constructor(
     private httpClient: HttpClient
-  ) { }
+  ) {
+  }
 
   getUserData(uid: string): Observable<UserData> {
     return this.httpClient.get(environment.firebase.databaseURL + `/users/${uid}.json`) as Observable<UserData>;
