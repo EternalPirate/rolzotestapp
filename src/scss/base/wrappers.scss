@@ -1,0 +1,77 @@
+%u,
+.u {
+  &-wp {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  &-reports {
+    display: flex;
+    flex-flow: wrap;
+    margin: 0 -5px;
+  }
+
+  &-wpBottom {
+    padding-bottom: 15px;
+  }
+
+  &-dfBtw {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-dfStartBtw {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &-dfStart {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &-dfCenterBtw {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-dfCenterArd {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  &-dfCenterStart {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &-dfCenterCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-dfEndBtw {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  &-dfStartEnd {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  &-w100p {
+    width: 100%;
+  }
+}
+
+
+
+

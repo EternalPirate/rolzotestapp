@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+/*
+- Follow this style guide in architecture with some modifications https://matthewelsom.com/blog/simple-scss-playbook.html
+- Follow SUIT CSS naming conventions https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md
+*/
+
+/*Vendor*/
+@import "scss/vendor/index";
+
+/*Abstracts*/
+@import "scss/abstract/index";
+
+/*Base Styles*/
+@import "scss/base/index";
+
+/*Components*/
+@import "scss/components/index";
+
+/*Layout*/
+@import "scss/layouts/index";
+
