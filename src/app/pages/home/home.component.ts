@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   user: User;
 
   constructor(
+    public auth: AuthService,
     private userDataService: UserDataService,
     private authService: AuthService,
   ) {

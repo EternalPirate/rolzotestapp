@@ -1,11 +1,16 @@
 <div class="Home">
   <div class="Home-wp">
+    <div class="Home-user">
+      <h2>Hi, {{user?.displayName}}</h2>
+      <button (click)="auth.signOut()" mat-stroked-button>Sign out</button>
+    </div>
     <h2 class="Home-title">Editor</h2>
     <pre #mediumEditor [innerHTML]="text" class="Home-editor"></pre>
     <h2 class="Home-title">Preview</h2>
     <app-mathjax [content]="preview"></app-mathjax>
   </div>
 </div>
+
 
 
 
