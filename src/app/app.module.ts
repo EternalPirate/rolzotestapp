@@ -12,13 +12,15 @@ import { HomeComponent } from '@app/pages/home/home.component';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { environment } from '@env/environment';
+import { MathjaxComponent } from './components/mathjax/mathjax.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    MathjaxComponent
   ],
   imports: [
     BrowserModule,

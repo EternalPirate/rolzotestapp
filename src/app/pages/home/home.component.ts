@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as MediumEditor from 'medium-editor';
 
 import { UserData, UserDataService } from '@app/core/api/data/user-data.service';
-import {AuthService, User} from '@app/core/services/auth/auth.service';
-import { EditorUtils } from '@app/core/utils/editor-utils';
+import { AuthService, User } from '@app/core/services/auth/auth.service';
 
 
 @AutoUnsubscribe()
@@ -18,19 +16,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('mediumEditor') mediumEditor: ElementRef;
 
   text: string;
+  preview: string;
   user: User;
 
   constructor(
     private userDataService: UserDataService,
     private authService: AuthService,
-    private editorUtils: EditorUtils,
-    private matSnackBar: MatSnackBar,
   ) {
   }
 
   async ngOnInit(): Promise<void> {
     this.user = await this.authService.getUser();
-    console.log(this.user);
     this.getUserData();
   }
 
@@ -55,27 +51,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
       timeout = setTimeout(() => {
         const text = (event.target as HTMLDivElement).innerHTML;
-        const updatedText = this.checkForLatex(text);
-        this.saveTextState(updatedText);
+        this.preview = text;
+        this.saveTextState(text);
       }, editorSaveTimeoutMs);
     });
-  }
-
-  private checkForLatex(text: string): string {
-    const latex = text.match(this.editorUtils.latexPattern);
-
-    if (latex) {
-      try {
-        const [editorValue, delimiter, value] = latex;
-        const calculatedValue = new Function('return ' + value)();
-        this.text = text.replace(editorValue, calculatedValue);
-        return this.text;
-      } catch (e) {
-        this.matSnackBar.open(`${e.message}. Example: $1+1$`, null, {duration: 5000});
-      }
-    }
-
-    return text;
   }
 
   private getUserData(): void {
