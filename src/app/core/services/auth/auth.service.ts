@@ -39,11 +39,11 @@ export class AuthService {
         );
     }
 
-    getUserUid(): Promise<string> {
-        return new Promise<string>(resolve => {
+    getUser(): Promise<User> {
+        return new Promise(resolve => {
             this.user$.subscribe(user => {
                 if (user) {
-                    resolve(user.uid);
+                    resolve(user);
                 }
             });
         });

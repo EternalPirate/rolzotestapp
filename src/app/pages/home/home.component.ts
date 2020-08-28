@@ -4,7 +4,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as MediumEditor from 'medium-editor';
 
 import { UserData, UserDataService } from '@app/core/api/data/user-data.service';
-import { AuthService } from '@app/core/services/auth/auth.service';
+import {AuthService, User} from '@app/core/services/auth/auth.service';
 import { EditorUtils } from '@app/core/utils/editor-utils';
 
 
@@ -16,10 +16,9 @@ import { EditorUtils } from '@app/core/utils/editor-utils';
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('mediumEditor') mediumEditor: ElementRef;
+
   text: string;
-
-
-  private userUid: string;
+  user: User;
 
   constructor(
     private userDataService: UserDataService,
@@ -30,7 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.userUid = await this.authService.getUserUid();
+    this.user = await this.authService.getUser();
+    console.log(this.user);
     this.getUserData();
   }
 
@@ -79,8 +79,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private getUserData(): void {
-    if (this.userUid) {
-      this.userDataService.getUserData(this.userUid).subscribe((userData: UserData) => {
+    if (this.user) {
+      this.userDataService.getUserData(this.user.uid).subscribe((userData: UserData) => {
         if (userData && Boolean(userData.text)) {
           this.text = userData.text;
         }
@@ -89,8 +89,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private saveTextState(innerHTML: string): void {
-    if (this.userUid) {
-      this.userDataService.putUserData(this.userUid, {text: innerHTML}).subscribe();
+    if (this.user) {
+      this.userDataService.putUserData(this.user.uid, {text: innerHTML}).subscribe();
     }
   }
 }
