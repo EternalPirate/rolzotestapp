@@ -8,71 +8,73 @@ import { auth } from 'firebase';
 
 
 export interface User {
-    uid: string;
-    email: string;
-    photoURL?: string;
-    displayName?: string;
-    myCustomData?: string;
+  uid: string;
+  email: string;
+  photoURL?: string;
+  displayName?: string;
+  myCustomData?: string;
 }
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
-    user$: Observable<User>;
+  user$: Observable<User>;
 
-    constructor(
-        private afAuth: AngularFireAuth,
-        private afs: AngularFirestore,
-        private router: Router
-    ) {
-        this.user$ = this.afAuth.authState.pipe(
-            switchMap(user => {
-                // Logged in
-                if (user) {
-                    return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-                } else {
-                    // Logged out
-                    return of(null);
-                }
-            })
-        );
-    }
+  constructor(
+    private afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    private router: Router
+  ) {
+    this.user$ = this.afAuth.authState.pipe(
+      switchMap(user => {
+        // Logged in
+        if (user) {
+          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+        } else {
+          // Logged out
+          return of(null);
+        }
+      })
+    );
+  }
 
-    getUser(): Promise<User> {
-        return new Promise(resolve => {
-            this.user$.subscribe(user => {
-                if (user) {
-                    resolve(user);
-                }
-            });
-        });
-    }
+  getUser(): Promise<User> {
+    return new Promise(resolve => {
+      this.user$.subscribe(user => {
+        if (user) {
+          resolve(user);
+        }
+      });
+    });
+  }
 
-    async googleSignin(): Promise<void> {
-        const provider = new auth.GoogleAuthProvider();
-        const credential = await this.afAuth.signInWithPopup(provider);
-        this.router.navigate(['/home']);
-        return this.updateUserData(credential.user);
-    }
+  async googleSignin(): Promise<void> {
+    const googleAuthProvider = new auth.GoogleAuthProvider();
+    googleAuthProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
+    const credential = await this.afAuth.signInWithPopup(googleAuthProvider);
+    this.router.navigate(['/home']);
+    return this.updateUserData(credential.user);
+  }
 
-    private updateUserData(user): Promise<void> {
-        // Sets user data to firestore on login
-        const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
+  private updateUserData(user): Promise<void> {
+    // Sets user data to firestore on login
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
 
-        const data = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL
-        };
+    const data = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL
+    };
 
-        return userRef.set(data, {merge: true});
+    return userRef.set(data, {merge: true});
+  }
 
-    }
-
-    async signOut(): Promise<void> {
-        await this.afAuth.signOut();
-        this.router.navigate(['/']);
-    }
+  async signOut(): Promise<void> {
+    await this.afAuth.signOut();
+    this.router.navigate(['/']);
+  }
 }

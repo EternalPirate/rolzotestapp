@@ -4,10 +4,12 @@
       <h2>Hi, {{user?.displayName}}</h2>
       <button (click)="auth.signOut()" mat-stroked-button>Sign out</button>
     </div>
+
     <h2 class="Home-title">Editor</h2>
-    <pre #mediumEditor [innerHTML]="text" class="Home-editor"></pre>
+    <pre #mediumEditor [innerHTML]="editorText" class="Home-editor"></pre>
+
     <h2 class="Home-title">Preview</h2>
-    <app-mathjax [content]="preview"></app-mathjax>
+    <app-mathjax *ngIf="previewText" [preview]="previewText"></app-mathjax>
   </div>
 </div>
 

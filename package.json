@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -25,7 +25,6 @@
     "@types/medium-editor": "^5.0.3",
     "firebase": "^7.19.1",
     "medium-editor": "^5.23.3",
-    "ngx-auto-unsubscribe": "^3.0.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

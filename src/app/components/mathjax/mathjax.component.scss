@@ -1,9 +1,27 @@
-
 :host {
+  position: relative;
   display: block;
   padding: 15px;
   background: white;
   border-radius: 10px;
   color: #000;
   overflow: auto;
+  min-height: 150px;
+}
+
+#mathContent {
+  transition: all 500ms linear;
+
+  &.is-loading {
+    filter: blur(3px);
+  }
+}
+
+.MathJax {
+  &-loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -50px 0 0 -50px;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 
 
 declare const MathJax: any;
@@ -8,33 +8,39 @@ declare const MathJax: any;
   templateUrl: './mathjax.component.html',
   styleUrls: ['./mathjax.component.scss']
 })
-export class MathjaxComponent implements OnInit, OnChanges {
-  @Input() content: string;
-
-
-  constructor() {
-
-  }
-
-  ngOnInit(): void {
-    this.loadMathConfig();
-    this.renderMath();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['content']) {
-      this.renderMath();
+export class MathjaxComponent {
+  content: string;
+  @Input() set preview(preview: string) {
+    if (preview) {
+      this.content = preview;
+      this.renderMathJax();
     }
   }
 
+  isLoading = false;
 
-  renderMath(): void {
-    setTimeout(() => {
-      MathJax.Hub.Queue(['Typeset', MathJax.Hub], 'mathContent');
-    }, 1000);
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.initMathJaxConfig();
   }
 
-  loadMathConfig(): void {
+  private renderMathJax(): void {
+    this.isLoading = true;
+
+    // wait for text rendered update
+    setTimeout(() => {
+      MathJax.Hub.Queue(['Typeset', MathJax.Hub], 'MathJax');
+
+      const mathJaxCallBack = () => {
+        this.isLoading = false;
+        this.changeDetectorRef.detectChanges();
+      };
+      MathJax.Hub.Queue(mathJaxCallBack);
+    });
+  }
+
+  private initMathJaxConfig(): void {
     MathJax.Hub.Config({
       showMathMenu: false,
       tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
