@@ -19,28 +19,10 @@ export class MathjaxComponent {
 
   isLoading = false;
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef
-  ) {
-    this.initMathJaxConfig();
-  }
-
-  private renderMathJax(): void {
-    this.isLoading = true;
-
-    // wait for text rendered update
-    setTimeout(() => {
-      MathJax.Hub.Queue(['Typeset', MathJax.Hub], 'MathJax');
-
-      const mathJaxCallBack = () => {
-        this.isLoading = false;
-        this.changeDetectorRef.detectChanges();
-      };
-      MathJax.Hub.Queue(mathJaxCallBack);
-    });
-  }
-
-  private initMathJaxConfig(): void {
+  /**
+   * Initiate MathJax library with the configuration
+   */
+  private static initMathJaxConfig(): void {
     MathJax.Hub.Config({
       showMathMenu: false,
       tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
@@ -48,6 +30,31 @@ export class MathjaxComponent {
       CommonHTML: { linebreaks: { automatic: true } },
       'HTML-CSS': { linebreaks: { automatic: true } },
       SVG: { linebreaks: { automatic: true } }
+    });
+  }
+
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+    MathjaxComponent.initMathJaxConfig();
+  }
+
+  /**
+   * Render text using MathJax library
+   */
+  private renderMathJax(): void {
+    this.isLoading = true;
+
+    // wait for text rendered update
+    setTimeout(() => {
+      MathJax.Hub.Queue(['Typeset', MathJax.Hub], 'MathJax');
+
+      // hide loader when mathJax will finish calculations
+      const mathJaxCallBack = () => {
+        this.isLoading = false;
+        this.changeDetectorRef.detectChanges();
+      };
+      MathJax.Hub.Queue(mathJaxCallBack);
     });
   }
 }

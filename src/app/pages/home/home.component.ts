@@ -33,6 +33,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initEditor();
   }
 
+  /**
+   * Get user data from firebase and set it to editor and preview
+   */
   private getUserData(): void {
     if (this.user) {
       this.userDataService.getUserData(this.user.uid).subscribe((userData: UserData) => {
@@ -44,11 +47,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Initiate MediumEditor
+   */
   private initEditor(): void {
     const mediumEditor = this.mediumEditor.nativeElement;
     const editor = new MediumEditor(mediumEditor, {placeholder: false});
 
     let timeout;
+    // add debounce editor change function to prevent from on character update
     const editorOnSaveDebounce = (event) => {
       const editorSaveTimeoutMs = 1000;
 
@@ -57,7 +64,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       timeout = setTimeout(() => {
+        // get editor text
         const text = (event.target as HTMLDivElement).innerHTML;
+        // update only preview
         this.previewText = text;
         this.saveTextState(text);
       }, editorSaveTimeoutMs);
@@ -66,6 +75,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     editor.subscribe('editableInput', editorOnSaveDebounce);
   }
 
+  /**
+   * Save editor text to firebase
+   * @param innerHTML - html text
+   */
   private saveTextState(innerHTML: string): void {
     if (this.user) {
       this.userDataService.putUserData(this.user.uid, {text: innerHTML}).subscribe();

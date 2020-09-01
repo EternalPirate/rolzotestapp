@@ -1,8 +1,7 @@
-import {AfterViewInit, Component} from '@angular/core';
-import { map, take, tap } from 'rxjs/operators';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {AuthService, User} from '@app/core/services/auth/auth.service';
+import { AuthService, User } from '@app/core/services/auth/auth.service';
 
 
 @Component({
@@ -10,7 +9,7 @@ import {AuthService, User} from '@app/core/services/auth/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
 
   constructor(
     private authService: AuthService,
@@ -19,14 +18,14 @@ export class AppComponent implements AfterViewInit {
     this.checkIfUserAlreadyIn();
   }
 
-  ngAfterViewInit(): void {
-  }
-
+  /**
+   * Check if user already in, and if so then redirect him to home page
+   */
   private async checkIfUserAlreadyIn(): Promise<void> {
     const user: User = await this.authService.getUser();
 
     if (user) {
-      this.router.navigate(['/home']);
+      await this.router.navigate(['/home']);
     }
   }
 }

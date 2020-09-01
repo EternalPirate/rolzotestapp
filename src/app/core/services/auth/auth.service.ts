@@ -39,6 +39,10 @@ export class AuthService {
     );
   }
 
+  /**
+   * Get current active user
+   * @return User promise
+   */
   getUser(): Promise<User> {
     return new Promise(resolve => {
       this.user$.subscribe(user => {
@@ -49,30 +53,34 @@ export class AuthService {
     });
   }
 
-  async googleSignin(): Promise<void> {
+  /**
+   * Sign in with firebase google auth
+   */
+  async googleSignIn(): Promise<void> {
     const googleAuthProvider = new auth.GoogleAuthProvider();
+
     googleAuthProvider.setCustomParameters({
-      prompt: 'select_account'
+      prompt: 'select_account' // always show select account popup
     });
+
     const credential = await this.afAuth.signInWithPopup(googleAuthProvider);
-    this.router.navigate(['/home']);
+    await this.router.navigate(['/home']);
     return this.updateUserData(credential.user);
   }
 
-  private updateUserData(user): Promise<void> {
-    // Sets user data to firestore on login
+  /**
+   * Update user
+   * @param user - user data
+   */
+  private updateUserData(user: User): Promise<void> {
+    // Update user data to firestore on login
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
-
-    const data = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
-    };
-
-    return userRef.set(data, {merge: true});
+    return userRef.set(user, {merge: true});
   }
 
+  /**
+   * Firebase auth logout and go to base page
+   */
   async signOut(): Promise<void> {
     await this.afAuth.signOut();
     this.router.navigate(['/']);
